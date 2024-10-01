@@ -14,8 +14,9 @@ type PersonUseCase struct {
 	PersonRepository domain.PersonRepository
 }
 
-func (pu *PersonUseCase) DeletePerson(string) {
-	panic("unimplemented")
+func (pu *PersonUseCase) DeletePerson(person_id string) (domain.Person, error) {
+	deletedPerson, err := pu.PersonRepository.DeletePerson(person_id)
+	return deletedPerson, err
 }
 
 func (pu *PersonUseCase) GetAllPersons() (*[]domain.Person, error){

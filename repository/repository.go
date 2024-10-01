@@ -18,8 +18,20 @@ type PersonRepository struct {
 	InMemory *[]domain.Person
 }
 
-func (pr *PersonRepository) DeletePerson(string) {
-	panic("unimplemented")
+func (pr *PersonRepository) DeletePerson(person_id string) (domain.Person, error) {
+	id, err := uuid.Parse(person_id)
+	if err != nil {
+		return domain.Person{}, errors.New("invalid id")
+	}
+	
+	for index, value := range *pr.InMemory {
+		if value.ID == id {
+			*pr.InMemory = append((*pr.InMemory)[:index], (*pr.InMemory)[index+1:]...)
+			return value, nil
+		}
+	}
+
+	return domain.Person{}, errors.New("person with the specified id not found")
 }
 
 func (pr *PersonRepository) GetAllPersons() (*[]domain.Person, error) {

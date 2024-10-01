@@ -22,7 +22,7 @@ type PersonUseCase interface {
 	GetPersonById(string) (Person, error)
 	Register(*NewPerson) error
 	UpdatePerson(NewPerson, string) ([]Person, error)
-	DeletePerson(string)
+	DeletePerson(string) (Person, error)
 }
 
 type PersonRepository interface {
@@ -30,7 +30,7 @@ type PersonRepository interface {
 	GetPersonById(string) (Person, error)
 	Register(*NewPerson) error
 	UpdatePerson(NewPerson, string) ([]Person, error)
-	DeletePerson(string)
+	DeletePerson(string) (Person, error)
 }
 
 var InMemory = []Person{}

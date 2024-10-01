@@ -112,6 +112,21 @@ func (pc *PersonController) UpdatePerson() gin.HandlerFunc {
 
 func (pc *PersonController) DeletePerson() gin.HandlerFunc {
 	return func(c *gin.Context) {
+		person_id := c.Param("person_id")
+		deletedPerson, err := pc.PersonUseCase.DeletePerson(person_id)
+		if err != nil {
+			c.IndentedJSON(http.StatusNotFound, gin.H{
+				"success" : false,
+				"message" : "person with the specified id not found",
+			})
+			
+			return
+		}
 
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"success" : true,
+			"message" : "person with the specified id found and deleted",
+			"deleted_person" : deletedPerson,
+		})
 	}
 }
