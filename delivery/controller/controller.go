@@ -61,7 +61,16 @@ func (pc *PersonController) GetAllPersons() gin.HandlerFunc {
 func (pc *PersonController) UpdatePerson() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		person_id := c.Param("person_id")
-		updatedPerson, err := pc.PersonUseCase.UpdatePerson(person_id)
+		var updatedInfo domain.NewPerson
+		if err := c.BindJSON(&updatedInfo); err != nil {
+			c.IndentedJSON(http.StatusBadRequest, gin.H{
+				"success" : false,
+				"message" : "invalid request format",
+			})
+
+			return
+		}
+		updatedPerson, err := pc.PersonUseCase.UpdatePerson(updatedInfo, person_id)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
 				"success" : false,
