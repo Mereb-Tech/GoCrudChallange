@@ -14,10 +14,11 @@ type PersonUseCase struct {
 	PersonRepository domain.PersonRepository
 }
 
-func (pu *PersonUseCase) DeletePerson(person_id string) (domain.Person, error) {
-	deletedPerson, err := pu.PersonRepository.DeletePerson(person_id)
-	return deletedPerson, err
+func (pu *PersonUseCase) Register(newPerson *domain.NewPerson) (error) {
+	err := pu.PersonRepository.Register(newPerson)
+	return err
 }
+
 
 func (pu *PersonUseCase) GetAllPersons() (*[]domain.Person, error){
 	persons, err := pu.PersonRepository.GetAllPersons()
@@ -29,13 +30,12 @@ func (pu *PersonUseCase) GetPersonById(person_id string) (domain.Person, error) 
 	return foundPerson, err
 }
 
-func (pu *PersonUseCase) Register(newPerson *domain.NewPerson) (error) {
-	err := pu.PersonRepository.Register(newPerson)
-	return err
-}
-
-
 func (pu *PersonUseCase) UpdatePerson(updatedInfo domain.NewPerson, person_id string) ([]domain.Person, error) {
 	updatedPerson, err := pu.PersonRepository.UpdatePerson(updatedInfo, person_id)
 	return updatedPerson, err
+}
+
+func (pu *PersonUseCase) DeletePerson(person_id string) (domain.Person, error) {
+	deletedPerson, err := pu.PersonRepository.DeletePerson(person_id)
+	return deletedPerson, err
 }

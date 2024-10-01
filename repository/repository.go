@@ -18,20 +18,21 @@ type PersonRepository struct {
 	InMemory *[]domain.Person
 }
 
-func (pr *PersonRepository) DeletePerson(person_id string) (domain.Person, error) {
-	id, err := uuid.Parse(person_id)
+func (pr *PersonRepository) Register(newPerson *domain.NewPerson) (error) {
+	id, err := uuid.NewRandom()
 	if err != nil {
-		return domain.Person{}, errors.New("invalid id")
-	}
-	
-	for index, value := range *pr.InMemory {
-		if value.ID == id {
-			*pr.InMemory = append((*pr.InMemory)[:index], (*pr.InMemory)[index+1:]...)
-			return value, nil
-		}
+		return err
 	}
 
-	return domain.Person{}, errors.New("person with the specified id not found")
+	addedPerson := domain.Person{
+		ID: id,
+		Name: newPerson.Name,
+		Age: newPerson.Age,
+		Hobbies: newPerson.Hobbies,
+	}
+
+	*pr.InMemory = append(*pr.InMemory, addedPerson)
+	return nil
 }
 
 func (pr *PersonRepository) GetAllPersons() (*[]domain.Person, error) {
@@ -51,23 +52,6 @@ func (pr *PersonRepository) GetPersonById(person_id string) (domain.Person, erro
 	}
 
 	return domain.Person{}, errors.New("person with the specified id not found")
-}
-
-func (pr *PersonRepository) Register(newPerson *domain.NewPerson) (error) {
-	id, err := uuid.NewRandom()
-	if err != nil {
-		return err
-	}
-
-	addedPerson := domain.Person{
-		ID: id,
-		Name: newPerson.Name,
-		Age: newPerson.Age,
-		Hobbies: newPerson.Hobbies,
-	}
-
-	*pr.InMemory = append(*pr.InMemory, addedPerson)
-	return nil
 }
 
 func (pr *PersonRepository) UpdatePerson(updatedInfo domain.NewPerson, person_id string) ([]domain.Person, error) {
@@ -92,4 +76,20 @@ func (pr *PersonRepository) UpdatePerson(updatedInfo domain.NewPerson, person_id
 	}
 
 	return []domain.Person{}, errors.New("person with the specified id not founr")
+}
+
+func (pr *PersonRepository) DeletePerson(person_id string) (domain.Person, error) {
+	id, err := uuid.Parse(person_id)
+	if err != nil {
+		return domain.Person{}, errors.New("invalid id")
+	}
+	
+	for index, value := range *pr.InMemory {
+		if value.ID == id {
+			*pr.InMemory = append((*pr.InMemory)[:index], (*pr.InMemory)[index+1:]...)
+			return value, nil
+		}
+	}
+
+	return domain.Person{}, errors.New("person with the specified id not found")
 }
