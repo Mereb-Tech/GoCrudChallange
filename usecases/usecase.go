@@ -1,7 +1,6 @@
 package usecases
 
 import (
-	"errors"
 	"mereb_go/domain"
 )
 
@@ -24,11 +23,18 @@ func (pu *PersonUseCase) GetAllPersons() (*[]domain.Person, error){
 	return persons, err
 }
 
-func (pu *PersonUseCase) Register(*domain.NewPerson) (error) {
-	panic("unimplemented")
+func (pu *PersonUseCase) GetPersonById(person_id string) (domain.Person, error) {
+	foundPerson, err := pu.PersonRepository.GetPersonById(person_id)
+	return foundPerson, err
+}
+
+func (pu *PersonUseCase) Register(newPerson *domain.NewPerson) (error) {
+	err := pu.PersonRepository.Register(newPerson)
+	return err
 }
 
 
-func (pu *PersonUseCase) UpdatePerson(string) {
-	panic("unimplemented")
+func (pu *PersonUseCase) UpdatePerson(updatedInfo domain.NewPerson, person_id string) ([]domain.Person, error) {
+	updatedPerson, err := pu.PersonRepository.UpdatePerson(updatedInfo, person_id)
+	return updatedPerson, err
 }

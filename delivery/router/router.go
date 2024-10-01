@@ -15,6 +15,7 @@ func PersonRoutes(internalRouter *gin.Engine, persons *[]domain.Person) {
 	}
 
 	internalRouter.GET("/api/person", pc.GetAllPersons())
+	internalRouter.GET("/api/person/:person_id", pc.GetPersonById())
 	internalRouter.POST("/api/person", pc.Register())
 	internalRouter.PUT("/api/person/:person_id", pc.UpdatePerson())
 	internalRouter.DELETE("/api/person/:person_id", pc.DeletePerson())

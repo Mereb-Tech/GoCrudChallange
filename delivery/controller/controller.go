@@ -58,6 +58,27 @@ func (pc *PersonController) GetAllPersons() gin.HandlerFunc {
 	}
 }
 
+func (pc *PersonController) GetPersonById() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		person_id := c.Param("person_id")
+		foundPerson, err := pc.PersonUseCase.GetPersonById(person_id)
+		if err != nil {
+			c.IndentedJSON(http.StatusNotFound, gin.H{
+				"success" : false,
+				"message" : "person with the specified id not found",
+			})
+			
+			return
+		}
+
+		c.IndentedJSON(http.StatusOK, gin.H{
+			"success" : true,
+			"message" : "person found and returned successfully",
+			"person" : foundPerson,
+		})
+	}
+}
+
 func (pc *PersonController) UpdatePerson() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		person_id := c.Param("person_id")

@@ -5,29 +5,31 @@ import (
 )
 
 type Person struct {
-	ID uuid.UUID
-	name string
-	age int16
-	hobbies []string
+	ID 			uuid.UUID 		`json:"id"`
+	Name 		string			`json:"name"`			
+	Age 		int16			`json:"age"`
+	Hobbies 	[]string		`json:"hobbies"`
 }
 
 type NewPerson struct {
-	name string
-	age string
-	hobbies []string
+	Name 		string			`json:"name"`
+	Age 		int16			`json:"age"`
+	Hobbies 	[]string		`json:"hobbies"`
 }
 
 type PersonUseCase interface {
 	GetAllPersons() (*[]Person, error)
-	Register(*NewPerson) (error)
-	UpdatePerson(string)
+	GetPersonById(string) (Person, error)
+	Register(*NewPerson) error
+	UpdatePerson(NewPerson, string) ([]Person, error)
 	DeletePerson(string)
 }
 
 type PersonRepository interface {
 	GetAllPersons() (*[]Person, error)
-	Register(*NewPerson) (error)
-	UpdatePerson(string)
+	GetPersonById(string) (Person, error)
+	Register(*NewPerson) error
+	UpdatePerson(NewPerson, string) ([]Person, error)
 	DeletePerson(string)
 }
 
