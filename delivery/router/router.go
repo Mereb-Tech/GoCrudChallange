@@ -2,16 +2,16 @@ package router
 
 import (
 	"github.com/gin-gonic/gin"
-	controllers "mereb_go/delivery/controller"
-	domain "mereb_go/domain"
-	"mereb_go/usecases"
-	"mereb_go/repository"
+	controllers "github.com/poseidon2022/GoCrudChallange/delivery/controller"
+	domain "github.com/poseidon2022/GoCrudChallange/domain"
+	"github.com/poseidon2022/GoCrudChallange/repository"
+	"github.com/poseidon2022/GoCrudChallange/usecases"
 )
 
 func PersonRoutes(internalRouter *gin.Engine, persons *[]domain.Person) {
 	pr := repository.NewPersonRepository(persons)
 	pc := &controllers.PersonController{
-		PersonUseCase : usecases.NewPersonUseCase(pr),
+		PersonUseCase: usecases.NewPersonUseCase(pr),
 	}
 
 	internalRouter.GET("/api/person", pc.GetAllPersons())

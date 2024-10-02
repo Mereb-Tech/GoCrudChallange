@@ -1,13 +1,14 @@
 package controller
 
 import (
-	"github.com/gin-gonic/gin"
 	"net/http"
-	"mereb_go/domain"
+
+	"github.com/gin-gonic/gin"
+	"github.com/poseidon2022/GoCrudChallange/domain"
 )
 
 type PersonController struct {
-	PersonUseCase 	domain.PersonUseCase
+	PersonUseCase domain.PersonUseCase
 }
 
 func (pc *PersonController) Register() gin.HandlerFunc {
@@ -16,8 +17,8 @@ func (pc *PersonController) Register() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		if err := c.BindJSON(&newPerson); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{
-				"success" : false,
-				"message" :  "invalid person format",
+				"success": false,
+				"message": "invalid person format",
 			})
 			return
 		}
@@ -25,16 +26,16 @@ func (pc *PersonController) Register() gin.HandlerFunc {
 		err := pc.PersonUseCase.Register(&newPerson)
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{
-				"success" : false,
-				"message" : "internal server error",
+				"success": false,
+				"message": "internal server error",
 			})
 
 			return
 		}
 
 		c.IndentedJSON(http.StatusOK, gin.H{
-			"success" : true,
-			"message" : "person registerd successfully",
+			"success": true,
+			"message": "person registerd successfully",
 		})
 	}
 }
@@ -44,16 +45,16 @@ func (pc *PersonController) GetAllPersons() gin.HandlerFunc {
 		allPersons, err := pc.PersonUseCase.GetAllPersons()
 		if err != nil {
 			c.IndentedJSON(http.StatusInternalServerError, gin.H{
-				"success" : false,
-				"message" : "internal server error",
+				"success": false,
+				"message": "internal server error",
 			})
 			return
 		}
-		
+
 		c.IndentedJSON(http.StatusOK, gin.H{
-			"success" : true,
-			"message" : "persons fetched successfully",
-			"persons" : allPersons,
+			"success": true,
+			"message": "persons fetched successfully",
+			"persons": allPersons,
 		})
 	}
 }
@@ -64,17 +65,17 @@ func (pc *PersonController) GetPersonById() gin.HandlerFunc {
 		foundPerson, err := pc.PersonUseCase.GetPersonById(person_id)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
-				"success" : false,
-				"message" : "person with the specified id not found",
+				"success": false,
+				"message": "person with the specified id not found",
 			})
-			
+
 			return
 		}
 
 		c.IndentedJSON(http.StatusOK, gin.H{
-			"success" : true,
-			"message" : "person found and returned successfully",
-			"person" : foundPerson,
+			"success": true,
+			"message": "person found and returned successfully",
+			"person":  foundPerson,
 		})
 	}
 }
@@ -85,8 +86,8 @@ func (pc *PersonController) UpdatePerson() gin.HandlerFunc {
 		var updatedInfo domain.NewPerson
 		if err := c.BindJSON(&updatedInfo); err != nil {
 			c.IndentedJSON(http.StatusBadRequest, gin.H{
-				"success" : false,
-				"message" : "invalid request format",
+				"success": false,
+				"message": "invalid request format",
 			})
 
 			return
@@ -94,21 +95,20 @@ func (pc *PersonController) UpdatePerson() gin.HandlerFunc {
 		updatedPerson, err := pc.PersonUseCase.UpdatePerson(updatedInfo, person_id)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
-				"success" : false,
-				"message" : "person with the specified id not found",
+				"success": false,
+				"message": "person with the specified id not found",
 			})
-			
+
 			return
 		}
 
 		c.IndentedJSON(http.StatusOK, gin.H{
-			"success" : true,
-			"message" : "person info updated successfully",
-			"updated person" : updatedPerson,
+			"success":        true,
+			"message":        "person info updated successfully",
+			"updated person": updatedPerson,
 		})
 	}
 }
-
 
 func (pc *PersonController) DeletePerson() gin.HandlerFunc {
 	return func(c *gin.Context) {
@@ -116,17 +116,17 @@ func (pc *PersonController) DeletePerson() gin.HandlerFunc {
 		deletedPerson, err := pc.PersonUseCase.DeletePerson(person_id)
 		if err != nil {
 			c.IndentedJSON(http.StatusNotFound, gin.H{
-				"success" : false,
-				"message" : "person with the specified id not found",
+				"success": false,
+				"message": "person with the specified id not found",
 			})
-			
+
 			return
 		}
 
 		c.IndentedJSON(http.StatusOK, gin.H{
-			"success" : true,
-			"message" : "person with the specified id found and deleted",
-			"deleted_person" : deletedPerson,
+			"success":        true,
+			"message":        "person with the specified id found and deleted",
+			"deleted_person": deletedPerson,
 		})
 	}
 }
