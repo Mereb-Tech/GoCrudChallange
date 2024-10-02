@@ -1,6 +1,7 @@
 package router
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/abe16s/GoCrudChallange/controllers"
@@ -26,5 +27,12 @@ func NewRouter(controller controllers.Controller) *gin.Engine {
 	r.PUT("/person/:id", controller.UpdatePerson)
 	r.DELETE("/person/:id", controller.DeletePerson)
 
+
+    r.NoRoute(func(c *gin.Context) {
+        c.JSON(http.StatusNotFound, gin.H{
+            "error": "Resource not found",
+        })
+    })
+    
     return r
 }
