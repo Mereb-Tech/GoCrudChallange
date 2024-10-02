@@ -3,8 +3,10 @@ package main
 import (
 	routers "mereb_go/delivery/router"
 	domain "mereb_go/domain"
-	"github.com/gin-gonic/gin"
+	"net/http"
+
 	"github.com/gin-contrib/cors"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
@@ -17,6 +19,14 @@ func main() {
         ExposeHeaders:    []string{"Content-Length"},
         AllowCredentials: true, 
     }
+
+	//I don't get why this is necessary since the browser any test environment
+	//handles this by default
+	router.NoRoute(func(c *gin.Context) {
+		c.IndentedJSON(http.StatusNotFound, gin.H{
+			"error" : "Resource not found",
+		})
+	})
 
     router.Use(cors.New(corsConfig))
 	routers.PersonRoutes(router, &domain.InMemory)
