@@ -6,7 +6,7 @@ import (
 )
 
 type IService interface {
-	CreatePerson(name string, age int, hobbies []string) error
+	CreatePerson(name string, age int, hobbies []string) (domain.Person, error)
 	GetAllPersons() ([]*domain.Person, error)
 	GetPersonById(id uuid.UUID) (*domain.Person, error)
 	UpdatePerson(id uuid.UUID, name string, age int, hobbies []string) error
@@ -21,9 +21,9 @@ func NewService(repo IRepo) *Service {
 	return &Service{repo: repo}
 }
 
-func (s *Service) CreatePerson(name string, age int, hobbies []string) error {
+func (s *Service) CreatePerson(name string, age int, hobbies []string) (domain.Person, error) {
 	person := domain.NewPerson(name, age, hobbies)
-	return s.repo.Create(person)
+	return person, s.repo.Create(person)
 }
 
 func (s *Service) GetAllPersons() ([]*domain.Person, error) {
@@ -36,7 +36,7 @@ func (s *Service) GetPersonById(id uuid.UUID) (*domain.Person, error) {
 
 func (s *Service) UpdatePerson(id uuid.UUID, name string, age int, hobbies []string) error {
 	person := domain.NewPerson(name, age, hobbies)
-	return s.repo.Update(person)
+	return s.repo.Update(id, person)
 }
 
 func (s *Service) DeletePerson(id uuid.UUID) error {

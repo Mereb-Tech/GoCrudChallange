@@ -9,6 +9,6 @@ type IRepo interface {
 	Create(person domain.Person) error
 	GetAllPersons() ([]*domain.Person, error)
 	GetPersonById(id uuid.UUID) (*domain.Person, error)
-	Update(person domain.Person) error
+	Update(id uuid.UUID, person domain.Person) error
 	Delete(id uuid.UUID) error
 }

@@ -12,7 +12,9 @@ type Repository struct {
 }
 
 func NewRepository() *Repository {
-	return &Repository{}
+	return &Repository{
+		persons: make(map[uuid.UUID]domain.Person),
+	}
 }
 
 func (r *Repository) Create(person domain.Person) error {
