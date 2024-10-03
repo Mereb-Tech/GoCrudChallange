@@ -7,6 +7,7 @@ type Person struct {
     Age     int      `json:"age"`
     Hobbies []string `json:"hobbies"`
 }
+
 // Dummy data: a slice of persons
 var Persons = []Person{
     {

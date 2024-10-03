@@ -6,6 +6,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/google/uuid"
 )
 
 func GetAllPersons(c *gin.Context) {
@@ -29,28 +30,47 @@ func GetPerson(c *gin.Context) {
 }
 
 func CreatePerson(c *gin.Context) {
-	 var person data.Person
+    var person data.Person
     if err := c.ShouldBindJSON(&person); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
 
-    err := services.CreatePerson(&person)
-    if err != nil {
+    // Generate a unique ID for the person
+    person.ID = uuid.New().String()
+
+    // Validate required fields
+    if person.Name == "" {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Name is required"})
+        return
+    }
+    if person.Age <= 0 {
+        c.JSON(http.StatusBadRequest, gin.H{"error": "Age must be a positive number"})
+        return
+    }
+    if person.Hobbies == nil {
+        person.Hobbies = []string{}
+    }
+
+    // Create the person
+    if err := services.CreatePerson(&person); err != nil {
         c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
         return
     }
-    c.JSON(http.StatusCreated, person)
 
+    c.JSON(http.StatusOK, person)
 }
 
 func UpdatePerson(c *gin.Context) {
-     id := c.Param("id")
+    id := c.Param("id")
     var updatedPerson data.Person
     if err := c.ShouldBindJSON(&updatedPerson); err != nil {
         c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
         return
     }
+
+    
+    updatedPerson.ID = id // ID cannot be updated, it will be ignored 
 
     err := services.UpdatePerson(id, &updatedPerson)
     if err != nil {
@@ -58,7 +78,6 @@ func UpdatePerson(c *gin.Context) {
         return
     }
     c.JSON(http.StatusOK, updatedPerson)
-
 }
 
 func DeletePerson(c *gin.Context) {
