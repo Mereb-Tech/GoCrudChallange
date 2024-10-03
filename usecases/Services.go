@@ -35,7 +35,12 @@ func (s *Service) GetPersonById(id uuid.UUID) (*domain.Person, error) {
 }
 
 func (s *Service) UpdatePerson(id uuid.UUID, name string, age int, hobbies []string) error {
-	person := domain.NewPerson(name, age, hobbies)
+	person := domain.Person{
+		ID:      id,
+		Name:    name,
+		Age:     age,
+		Hobbies: hobbies,
+	}
 	return s.repo.Update(id, person)
 }
 

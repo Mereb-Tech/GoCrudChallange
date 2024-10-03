@@ -39,7 +39,6 @@ func (r *Repository) GetPersonById(id uuid.UUID) (*domain.Person, error) {
 
 func (r *Repository) Update(id uuid.UUID, updatePerson domain.Person) error {
 	if _, ok := r.persons[id]; ok {
-		updatePerson.ID = id
 		r.persons[id] = updatePerson
 		return nil
 	}
