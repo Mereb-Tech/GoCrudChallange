@@ -7,16 +7,15 @@ type Person struct {
     Age     int      `json:"age"`
     Hobbies []string `json:"hobbies"`
 }
-
-// Dummy data: a map of persons 
-var Persons = map[string]Person{
-    "1": {
+// Dummy data: a slice of persons
+var Persons = []Person{
+    {
         ID:      "1",
         Name:    "Bisrat Berhanu",
         Age:     30,
         Hobbies: []string{"Reading", "Traveling"},
     },
-    "2": {
+    {
         ID:      "2",
         Name:    "Melake Berhanu",
         Age:     25,
