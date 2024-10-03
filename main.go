@@ -1,9 +1,10 @@
 package main
 
-// import "GoCrudChallange_Bisrat/routers"
+import "GoCrudChallange_Bisrat/routers"
 
 func main() {
-	// router := routers.SetUpRouter()
+	router := routers.SetUpRouter()
+	 router.Run()
 
 
 }
