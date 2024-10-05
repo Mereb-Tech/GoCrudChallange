@@ -24,6 +24,9 @@ func NewPersonRepo() *PersonRepo {
 
 // Save adds a new Person to the repository or updates an existing one.
 func (r *PersonRepo) Save(person *models.Person) ierr.IErr {
+	if person == nil {
+		return errdmn.NewUnexpected("Person cannot be nil")
+	}
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

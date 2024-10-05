@@ -79,7 +79,12 @@ func (c *PersonController) create(ctx *gin.Context) {
 		Age:     person.Age(),
 		Hobbies: person.Hobbies(),
 	}
-	baseURL := fmt.Sprintf("http://%s", ctx.Request.Host)
+
+	scheme := "http"
+	if ctx.Request.TLS != nil {
+		scheme = "https"
+	}
+	baseURL := fmt.Sprintf("%s://%s", scheme, ctx.Request.Host)
 	resourceLocation := fmt.Sprintf("%s%s/%s", baseURL, ctx.Request.URL.Path, person.ID().String())
 	c.RespondWithLocation(ctx, http.StatusCreated, response, resourceLocation)
 	log.Printf("CreatePerson: Successfully created person with ID: %s", person.ID())

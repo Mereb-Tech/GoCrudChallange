@@ -19,7 +19,7 @@ type Person struct {
 	id      uuid.UUID
 	name    string
 	age     int8
-	hobbies *[]string
+	hobbies []string
 }
 
 // PersonConfig is used to initialize a new Person.
@@ -50,14 +50,14 @@ func NewPerson(c *PersonConfig) (*Person, ierr.IErr) {
 
 // Copy creates a deep copy of the Person struct.
 func (p *Person) Copy() *Person {
-	hobbiesCopy := make([]string, len(*p.hobbies))
-	copy(hobbiesCopy, *p.hobbies)
+	hobbiesCopy := make([]string, len(p.hobbies))
+	copy(hobbiesCopy, p.hobbies)
 
 	return &Person{
 		id:      p.id,
 		name:    p.name,
 		age:     p.age,
-		hobbies: &hobbiesCopy,
+		hobbies: hobbiesCopy,
 	}
 }
 
@@ -96,7 +96,7 @@ func (p *Person) SetAge(newAge int8) ierr.IErr {
 
 // Hobbies returns the person's hobbies.
 func (p *Person) Hobbies() []string {
-	return *p.hobbies
+	return p.hobbies
 }
 
 // SetHobbies replaces the existing hobbies with a new list, omitting empty strings.
@@ -107,5 +107,5 @@ func (p *Person) SetHobbies(newHobbies []string) {
 			filteredHobbies = append(filteredHobbies, hobby)
 		}
 	}
-	p.hobbies = &filteredHobbies
+	p.hobbies = filteredHobbies
 }

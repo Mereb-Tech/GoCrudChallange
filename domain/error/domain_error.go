@@ -20,7 +20,7 @@ const (
 // Error represents a custom domain error with a specific type and message.
 type Error struct {
 	kind    string // The type of the error (e.g., Validation, Conflict)
-	Message string // The detailed error message
+	message string
 }
 
 // Ensure that Error implements the ierr.IErr interface.
@@ -28,12 +28,12 @@ var _ ierr.IErr = (*Error)(nil)
 
 // new creates a new Error instance with the given type and message.
 func new(errType string, message string) *Error {
-	return &Error{kind: errType, Message: message}
+	return &Error{kind: errType, message: message}
 }
 
 // Error returns the string representation of the Error.
 func (e *Error) Error() string { // Changed receiver to pointer
-	return fmt.Sprintf("%s: %s", e.kind, e.Message)
+	return fmt.Sprintf("%s: %s", e.kind, e.message)
 }
 
 // Type returns the type of the Error.
