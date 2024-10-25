@@ -20,7 +20,7 @@ func NewUserHandler(userApi apiport.UserApiPort) *UserHandler {
 }
 
 func (uh *UserHandler) UserCreateHandler(w http.ResponseWriter, r *http.Request) {
-	var user domain.User
+	var user domain.CreateUserDTO
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
 		http.Error(w, "Invalid request payload", http.StatusBadRequest)
@@ -30,7 +30,10 @@ func (uh *UserHandler) UserCreateHandler(w http.ResponseWriter, r *http.Request)
 	createdUser, err := uh.UserApi.CreateUser(user)
 	if err != nil {
 		if errors.Is(err, domain.ErrDuplicateId) {
-			http.Error(w, "Server failed to generate a unique id", http.StatusInternalServerError)
+			http.Error(w, "Server failed to generate a unique id \nCould not create user", http.StatusInternalServerError)
+			return
+		} else if errors.Is(err, domain.ErrBadRequest) {
+			http.Error(w, "Validation Failed.  \nCould not create user", http.StatusBadRequest)
 			return
 		}
 		http.Error(w, "Could not create user", http.StatusInternalServerError)
@@ -87,7 +90,10 @@ func (uh *UserHandler) UserUpdateHandler(w http.ResponseWriter, r *http.Request)
 	var user domain.UpdateUserDTO
 	err := json.NewDecoder(r.Body).Decode(&user)
 	if err != nil {
-		http.Error(w, "Invalid request payload", http.StatusBadRequest)
+		http.Error(w, "Invalid request payload \nCould not create user", http.StatusBadRequest)
+		return
+	} else if errors.Is(err, domain.ErrBadRequest) {
+		http.Error(w, "Validation Failed. \nCould not create user", http.StatusBadRequest)
 		return
 	}
 
@@ -98,7 +104,7 @@ func (uh *UserHandler) UserUpdateHandler(w http.ResponseWriter, r *http.Request)
 			http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
 			return
 		}
-		http.Error(w, "Could not update user", http.StatusInternalServerError)
+		http.Error(w, "Could not update user", http.StatusBadRequest)
 		return
 	}
 

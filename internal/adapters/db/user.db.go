@@ -14,16 +14,20 @@ func NewUserRepo(store map[string]domain.User) *UserRepo {
 		store: store,
 	}
 }
-func (ur *UserRepo) Create(user domain.User) (*domain.User, error) {
-	id := uuid.New().String()
-	user.Id = id
-	ur.store[id] = user
-	// usr := ur.store[id] //Task
-	usr, err := ur.ReadOne(id)
-	if err != nil {
-		return nil, err
+func (ur *UserRepo) Create(user domain.CreateUserDTO) (*domain.User, error) {
+	domainUser := domain.User{
+		Id:      uuid.New().String(),
+		Name:    user.Name,
+		Age:     user.Age,
+		Hobbies: user.Hobbies,
 	}
-	return usr, nil
+	if _, exists := ur.store[domainUser.Id]; exists {
+		return nil, domain.ErrDuplicateId
+	}
+	ur.store[domainUser.Id] = domainUser
+
+	usr := ur.store[domainUser.Id]
+	return &usr, nil
 }
 
 func (ur *UserRepo) ReadOne(id string) (*domain.User, error) {

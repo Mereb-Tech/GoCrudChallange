@@ -15,7 +15,10 @@ func NewUserApi(userDbPort dbport.UserDbPort) *UserApi {
 	}
 }
 
-func (ua *UserApi) CreateUser(user domain.User) (*domain.User, error) {
+func (ua *UserApi) CreateUser(user domain.CreateUserDTO) (*domain.User, error) {
+	if err := domain.ValidateCreateUserDTO(user); err != nil {
+		return nil, domain.ErrBadRequest
+	}
 	return ua.UserDbPort.Create(user)
 
 }
@@ -29,6 +32,11 @@ func (ua *UserApi) GetAllUsers() ([]*domain.User, error) {
 }
 
 func (ua *UserApi) UpdateUser(id string, user domain.UpdateUserDTO) (*domain.User, error) {
+
+	if err := domain.ValidateUpdateUserDTO(user); err != nil {
+		return nil, domain.ErrBadRequest
+	}
+
 	existingUser, err := ua.GetUserByID(id)
 	if err != nil {
 		return nil, err
