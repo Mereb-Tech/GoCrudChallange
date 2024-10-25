@@ -28,6 +28,22 @@ func (ua *UserApi) GetAllUsers() ([]*domain.User, error) {
 	return ua.UserDbPort.ReadAll()
 }
 
-func (ua *UserApi) UpdateUser(id string, user domain.User) (*domain.User, error) {
-	return ua.UserDbPort.Update(id, user)
+// type str
+
+func (ua *UserApi) UpdateUser(id string, user domain.UpdateUserDTO) (*domain.User, error) {
+	existingUser, err := ua.GetUserByID(id)
+	if err != nil {
+		return nil, err
+	}
+	if user.Age != nil {
+		existingUser.Age = *user.Age
+	}
+	if user.Name != nil {
+		existingUser.Name = *user.Name
+	}
+	if user.Hobbies != nil {
+		existingUser.Hobbies = *user.Hobbies
+	}
+
+	return ua.UserDbPort.Update(id, *existingUser)
 }

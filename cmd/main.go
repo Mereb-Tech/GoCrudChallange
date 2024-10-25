@@ -10,7 +10,6 @@ import (
 	"github.com/Mahider-T/GoCrudChallange/internal/application/core/api"
 	"github.com/Mahider-T/GoCrudChallange/internal/application/core/domain"
 	"github.com/Mahider-T/GoCrudChallange/internal/ports/apiport"
-	// "github.com/Mahider-T/GoCrudChallange/internal/ports/dbport"
 )
 
 type Application struct {
@@ -41,13 +40,15 @@ func main() {
 	var storage = make(map[string]domain.User)
 
 	app := &Application{
-		// userRepo:    db.NewUserRepo(storage),
 		userService: api.NewUserApi(db.NewUserRepo(storage)),
 	}
 
 	userHandler := handlers.NewUserHandler(app.userService)
 
-	mux.HandleFunc("POST /users", userHandler.UserCreatePost)
+	mux.HandleFunc("POST /users", userHandler.UserCreateHandler)
+	mux.HandleFunc("GET /users", userHandler.UserGetAllHandler)
+	mux.HandleFunc("GET /users/{id}", userHandler.UserGetByIdHandler)
+	mux.HandleFunc("PUT /users/{id}", userHandler.UserUpdateHandler)
 
 	port := os.Getenv("PORT")
 

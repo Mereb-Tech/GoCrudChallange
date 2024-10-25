@@ -6,3 +6,9 @@ type User struct {
 	Age     int      `json:"age"`
 	Hobbies []string `json:"hobbies"`
 }
+
+type UpdateUserDTO struct {
+	Name    *string   `json:"name"`
+	Age     *int      `json:"age"`
+	Hobbies *[]string `json:"hobbies"`
+}
