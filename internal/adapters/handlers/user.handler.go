@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"encoding/json"
+	"errors"
 	"net/http"
 
 	"github.com/Mahider-T/GoCrudChallange/internal/application/core/domain"
@@ -28,6 +29,10 @@ func (uh *UserHandler) UserCreateHandler(w http.ResponseWriter, r *http.Request)
 
 	createdUser, err := uh.UserApi.CreateUser(user)
 	if err != nil {
+		if errors.Is(err, domain.ErrDuplicateId) {
+			http.Error(w, "Server failed to generate a unique id", http.StatusInternalServerError)
+			return
+		}
 		http.Error(w, "Could not create user", http.StatusInternalServerError)
 		return
 	}
@@ -42,9 +47,15 @@ func (uh *UserHandler) UserCreateHandler(w http.ResponseWriter, r *http.Request)
 func (uh *UserHandler) UserGetAllHandler(w http.ResponseWriter, r *http.Request) {
 
 	users, err := uh.UserApi.GetAllUsers()
+
 	if err != nil {
-		http.Error(w, "Could not get users", http.StatusInternalServerError) //task : handle empty list
+		if errors.Is(err, domain.ErrNoRecord) {
+			http.Error(w, `{"error": "users not found"}`, http.StatusNotFound)
+			return
+		}
+		http.Error(w, "Could not get users", http.StatusInternalServerError)
 	}
+
 	err = WriteJSON(w, http.StatusOK, users, nil)
 	if err != nil {
 		http.Error(w, "Error writing response", http.StatusInternalServerError)
@@ -55,6 +66,10 @@ func (uh *UserHandler) UserGetByIdHandler(w http.ResponseWriter, r *http.Request
 	id := r.PathValue("id")
 	user, err := uh.UserApi.GetUserByID(id)
 	if err != nil {
+		if errors.Is(err, domain.ErrNoRecord) {
+			http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
+			return
+		}
 		http.Error(w, "Could not get user by id", http.StatusInternalServerError)
 		return
 	}
@@ -79,6 +94,10 @@ func (uh *UserHandler) UserUpdateHandler(w http.ResponseWriter, r *http.Request)
 	updatedUser, err := uh.UserApi.UpdateUser(id, user)
 
 	if err != nil {
+		if errors.Is(err, domain.ErrNoRecord) {
+			http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
+			return
+		}
 		http.Error(w, "Could not update user", http.StatusInternalServerError)
 		return
 	}
@@ -94,6 +113,10 @@ func (uh *UserHandler) UserDeleteHandler(w http.ResponseWriter, r *http.Request)
 	err := uh.UserApi.DeleteUser(id)
 
 	if err != nil {
+		if errors.Is(err, domain.ErrNoRecord) {
+			http.Error(w, `{"error": "user not found"}`, http.StatusNotFound)
+			return
+		}
 		http.Error(w, "Could not delete user", http.StatusInternalServerError)
 		return
 	}

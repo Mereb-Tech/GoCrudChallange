@@ -1,8 +1,6 @@
 package db
 
 import (
-	"errors"
-
 	"github.com/Mahider-T/GoCrudChallange/internal/application/core/domain"
 	"github.com/google/uuid"
 )
@@ -29,7 +27,10 @@ func (ur *UserRepo) Create(user domain.User) (*domain.User, error) {
 }
 
 func (ur *UserRepo) ReadOne(id string) (*domain.User, error) {
-	usr := ur.store[id]
+	usr, ok := ur.store[id]
+	if !ok {
+		return nil, domain.ErrNoRecord
+	}
 	return &usr, nil
 }
 func (ur *UserRepo) ReadAll() ([]*domain.User, error) {
@@ -37,6 +38,9 @@ func (ur *UserRepo) ReadAll() ([]*domain.User, error) {
 
 	for _, value := range ur.store {
 		usrs = append(usrs, &value)
+	}
+	if len(usrs) == 0 {
+		return nil, domain.ErrNoRecord
 	}
 	return usrs, nil
 }
@@ -56,7 +60,7 @@ func (ur *UserRepo) Delete(id string) error {
 	_, ok := ur.store[id]
 
 	if !ok {
-		return errors.New("no such record")
+		return domain.ErrNoRecord
 	}
 	delete(ur.store, id)
 	return nil
