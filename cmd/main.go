@@ -49,6 +49,7 @@ func main() {
 	mux.HandleFunc("GET /users", userHandler.UserGetAllHandler)
 	mux.HandleFunc("GET /users/{id}", userHandler.UserGetByIdHandler)
 	mux.HandleFunc("PUT /users/{id}", userHandler.UserUpdateHandler)
+	mux.HandleFunc("DELETE /users/{id}", userHandler.UserDeleteHandler)
 
 	port := os.Getenv("PORT")
 

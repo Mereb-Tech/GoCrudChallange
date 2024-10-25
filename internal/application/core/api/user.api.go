@@ -28,8 +28,6 @@ func (ua *UserApi) GetAllUsers() ([]*domain.User, error) {
 	return ua.UserDbPort.ReadAll()
 }
 
-// type str
-
 func (ua *UserApi) UpdateUser(id string, user domain.UpdateUserDTO) (*domain.User, error) {
 	existingUser, err := ua.GetUserByID(id)
 	if err != nil {
@@ -46,4 +44,8 @@ func (ua *UserApi) UpdateUser(id string, user domain.UpdateUserDTO) (*domain.Use
 	}
 
 	return ua.UserDbPort.Update(id, *existingUser)
+}
+
+func (ua *UserApi) DeleteUser(id string) error {
+	return ua.UserDbPort.Delete(id)
 }

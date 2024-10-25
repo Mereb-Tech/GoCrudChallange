@@ -87,5 +87,20 @@ func (uh *UserHandler) UserUpdateHandler(w http.ResponseWriter, r *http.Request)
 	if err != nil {
 		http.Error(w, "Error writing response", http.StatusInternalServerError)
 	}
+}
+
+func (uh *UserHandler) UserDeleteHandler(w http.ResponseWriter, r *http.Request) {
+	id := r.PathValue("id")
+	err := uh.UserApi.DeleteUser(id)
+
+	if err != nil {
+		http.Error(w, "Could not delete user", http.StatusInternalServerError)
+		return
+	}
+
+	err = WriteJSON(w, http.StatusNoContent, "Successfully deleted user", nil) //task : returns 200 instead of 204
+	if err != nil {
+		http.Error(w, "Error writing response", http.StatusInternalServerError)
+	}
 
 }
