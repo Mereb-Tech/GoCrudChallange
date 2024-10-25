@@ -13,8 +13,8 @@ import (
 )
 
 type Application struct {
-	// userRepo    dbport.UserDbPort
-	userService apiport.UserApiPort
+	// personRepo    dbport.PersonDbPort
+	personService apiport.PersonApiPort
 }
 
 func enableCors(next http.Handler) http.Handler {
@@ -37,19 +37,19 @@ func main() {
 
 	mux := http.NewServeMux()
 
-	var storage = make(map[string]domain.User)
+	var storage = make(map[string]domain.Person)
 
 	app := &Application{
-		userService: api.NewUserApi(db.NewUserRepo(storage)),
+		personService: api.NewPersonApi(db.NewPersonRepo(storage)),
 	}
 
-	userHandler := handlers.NewUserHandler(app.userService)
+	personHandler := handlers.NewPersonHandler(app.personService)
 
-	mux.HandleFunc("POST /users", userHandler.UserCreateHandler)
-	mux.HandleFunc("GET /users", userHandler.UserGetAllHandler)
-	mux.HandleFunc("GET /users/{id}", userHandler.UserGetByIdHandler)
-	mux.HandleFunc("PUT /users/{id}", userHandler.UserUpdateHandler)
-	mux.HandleFunc("DELETE /users/{id}", userHandler.UserDeleteHandler)
+	mux.HandleFunc("POST /person", personHandler.PersonCreateHandler)
+	mux.HandleFunc("GET /person", personHandler.PersonGetAllHandler)
+	mux.HandleFunc("GET /person/{personId}", personHandler.PersonGetByIdHandler)
+	mux.HandleFunc("PUT /person/{personId}", personHandler.PersonUpdateHandler)
+	mux.HandleFunc("DELETE /person/{personId}", personHandler.PersonDeleteHandler)
 
 	port := os.Getenv("PORT")
 

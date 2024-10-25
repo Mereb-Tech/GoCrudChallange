@@ -4,31 +4,31 @@ import (
 	"github.com/go-playground/validator/v10"
 )
 
-type User struct {
+type Person struct {
 	Id      string   `json:"id"`
 	Name    string   `json:"name"`
 	Age     int      `json:"age"`
 	Hobbies []string `json:"hobbies"`
 }
 
-type UpdateUserDTO struct {
+type UpdatePersonDTO struct {
 	Name    *string   `json:"name" validate:"omitempty,min=1"`
 	Age     *int      `json:"age" validate:"omitempty,gte=0,lte=130"`
 	Hobbies *[]string `json:"hobbies" validate:"omitempty,dive,min=1"`
 }
 
-type CreateUserDTO struct {
+type CreatePersonDTO struct {
 	Name    string   `json:"name" validate:"required,min=1"`
 	Age     int      `json:"age" validate:"required,gte=0,lte=130"`
 	Hobbies []string `json:"hobbies" validate:"required,dive,min=1"`
 }
 
-func ValidateCreateUserDTO(createUserDTO CreateUserDTO) error {
+func ValidateCreatePersonDTO(createPersonDTO CreatePersonDTO) error {
 	validate := validator.New()
-	return validate.Struct(createUserDTO)
+	return validate.Struct(createPersonDTO)
 }
 
-func ValidateUpdateUserDTO(updateUserDTO UpdateUserDTO) error {
+func ValidateUpdatePersonDTO(updatePersonDTO UpdatePersonDTO) error {
 	validate := validator.New()
-	return validate.Struct(updateUserDTO)
+	return validate.Struct(updatePersonDTO)
 }
