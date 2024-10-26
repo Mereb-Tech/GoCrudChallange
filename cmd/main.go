@@ -17,6 +17,10 @@ type Application struct {
 	personService apiport.PersonApiPort
 }
 
+func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "404 Not Found - Resource does not exist", http.StatusNotFound)
+}
+
 func enableCors(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
@@ -50,6 +54,8 @@ func main() {
 	mux.HandleFunc("GET /person/{personId}", personHandler.PersonGetByIdHandler)
 	mux.HandleFunc("PUT /person/{personId}", personHandler.PersonUpdateHandler)
 	mux.HandleFunc("DELETE /person/{personId}", personHandler.PersonDeleteHandler)
+
+	mux.HandleFunc("/", NotFoundHandler)
 
 	port := os.Getenv("PORT")
 
