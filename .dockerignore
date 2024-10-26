@@ -1,0 +1,49 @@
+# Ignore the Go binary files
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.a
+*.out
+*.test
+
+# Ignore the vendor directory
+vendor/
+
+# Ignore build artifacts
+bin/
+obj/
+
+# Ignore IDE and editor files
+*.idea/
+*.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore macOS files
+.DS_Store
+
+# Ignore logs
+*.log
+
+# Ignore environment variable files
+.env
+.env.local
+.env.*.local
+
+# Ignore coverage reports
+*.cover
+coverage/
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore Git and version control directories
+.git/
+.gitignore
+
+# Ignore Docker-related files
+Dockerfile
+docker-compose.yml

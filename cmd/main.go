@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
 	"github.com/Mahider-T/GoCrudChallange/internal/adapters/db"
 	"github.com/Mahider-T/GoCrudChallange/internal/adapters/handlers"
@@ -13,7 +15,6 @@ import (
 )
 
 type Application struct {
-	// personRepo    dbport.PersonDbPort
 	personService apiport.PersonApiPort
 }
 
@@ -27,7 +28,6 @@ func enableCors(next http.Handler) http.Handler {
 		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE")
 		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
 
-		// Handle preflight requests
 		if r.Method == http.MethodOptions {
 			w.WriteHeader(http.StatusOK)
 			return
@@ -36,8 +36,10 @@ func enableCors(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r)
 	})
 }
-
 func main() {
+
+	infoLog := log.New(os.Stdout, "INFO\t", log.Ldate|log.Ltime)
+	errorLog := log.New(os.Stderr, "ERROR\t", log.Ldate|log.Ltime|log.Lshortfile)
 
 	mux := http.NewServeMux()
 
@@ -63,7 +65,18 @@ func main() {
 		port = "8080"
 	}
 
-	log.Println("Listening on port:", port)
-	http.ListenAndServe(":"+port, enableCors(mux))
+	infoLog.Printf("Starting server on %s", port)
+	addr := fmt.Sprintf(":%s", port)
 
+	ser := &http.Server{
+
+		Addr:         addr,
+		Handler:      enableCors(mux),
+		ErrorLog:     errorLog,
+		IdleTimeout:  time.Minute,
+		ReadTimeout:  5 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+	err := ser.ListenAndServe()
+	errorLog.Fatal(err)
 }
