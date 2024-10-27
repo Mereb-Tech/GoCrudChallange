@@ -1,6 +1,6 @@
 # Go CRUD Application 
 
-This project is a CRUD application in Go that manages a "Person" entity using Go’s built-in `net/http` package, following a hexagonal architecture to maintain separation of concerns and scalability. The application is hosted on a VPS with a domain at [mahider.pro.et](https://mahider.pro.et), and it leverages several technologies to ensure efficient development, deployment, monitoring, and secure HTTPS handling.
+This project is a CRUD application in Go that manages a "Person" entity using Go’s built-in `net/http` package, following a hexagonal architecture to maintain separation of concerns and scalability. The application is hosted on a VPS with a domain at [merebcrud.pro.et](https://merebcrud.pro.et), and it leverages several technologies to ensure efficient development, deployment, monitoring, and secure HTTPS handling.
 
 ## Table of Contents
 - [Architecture](#architecture)
@@ -44,7 +44,7 @@ This application follows a **Hexagonal Architecture** (also known as ports and a
 - **Caddy**: Reverse proxy for HTTPS/TLS management.
 - **Prometheus**: Monitoring tool, used here to count total HTTP requests to each endpoint.
 - **GitHub Actions**: Automates testing and deployment as part of the CI/CD pipeline.
-- **VPS**: Hosted on a Virtual Private Server, available at [mahider.pro.et](https://mahider.pro.et).
+- **VPS**: Hosted on a Virtual Private Server, available at [merebcrud.pro.et](https://merebcrud.pro.et).
 
 ---
 

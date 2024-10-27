@@ -1,19 +1,11 @@
-mahider.pro.et {
+merebcrud.pro.et {
     # Enable automatic HTTPS for the API
     reverse_proxy app:3000
 
     log {
-        output file /var/log/caddy/mahider.pro.et.log
+        output file /var/log/caddy/merebcrud.pro.et.log
         level INFO
     }
 }
 
-monitor.mahider.pro.et {
-    # Enable automatic HTTPS for the monitoring service
-    reverse_proxy app:9090
 
-    log {
-        output file /var/log/caddy/monitor.mahider.pro.et.log
-        level INFO
-    }
-}
