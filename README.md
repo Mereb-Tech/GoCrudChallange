@@ -55,7 +55,7 @@ This application follows a **Hexagonal Architecture** (also known as ports and a
 1. **Clone the repository:**
    ```bash
    git clone https://github.com/Mahider-T/GoCrudChallange.git
-   cd your-repo-name
+   cd GoCrudChallange
    ```
 
 2. **Build and start the services**:
