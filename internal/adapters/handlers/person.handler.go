@@ -133,3 +133,7 @@ func (uh *PersonHandler) PersonDeleteHandler(w http.ResponseWriter, r *http.Requ
 	}
 
 }
+
+func (uh *PersonHandler) NotFoundHandler(w http.ResponseWriter, r *http.Request) {
+	http.Error(w, "404 Not Found - Resource does not exist", http.StatusNotFound)
+}
