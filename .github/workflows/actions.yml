@@ -1,0 +1,22 @@
+name: Deploy
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Access to Server, Remove Docker Containers, Build Docker Image, Run Docker Container
+        run: |
+          sshpass -p ${{ secrets.PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.USER_NAME }}@${{ secrets.SERVER_ADDRESS }} -p ${{ secrets.SSH_PORT }} "
+          echo ✅ SSH connection successful &&
+          echo ✅ Changing directory to /root/www/GoCrudChallange &&
+          cd /root/www/GoCrudChallange &&
+          echo ✅ Pulling latest code from GitHub &&
+          git pull https://${{ secrets.TOKEN }}@github.com/Mahider-T/GoCrudChallange.git main &&
+          echo ✅ Building Docker Image &&
+          docker-compose -f docker-compose.yml build &&
+          echo ✅ Running Docker Container &&
+          docker-compose -f docker-compose.yml up -d --remove-orphans &&
+          echo ✅ Deployed successfully &&
+          exit"
