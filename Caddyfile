@@ -1,6 +1,6 @@
 mahider.pro.et {
     # Enable automatic HTTPS
-    reverse_proxy localhost:8080
+    reverse_proxy localhost:3000
 
     log {
         output file /var/log/caddy/mahider.pro.et.log
