@@ -15,8 +15,8 @@ jobs:
           echo ✅ Pulling latest code from GitHub &&
           git pull https://${{ secrets.TOKEN }}@github.com/Mahider-T/GoCrudChallange.git main &&
           echo ✅ Building Docker Image &&
-          docker compose -f docker-compose.yml build &&
+          docker-compose -f docker-compose.yml build &&
           echo ✅ Running Docker Container &&
-          docker compose -f docker-compose.yml up -d --remove-orphans &&
+          docker-compose -f docker-compose.yml up -d --remove-orphans &&
           echo ✅ Deployed successfully &&
           exit"
