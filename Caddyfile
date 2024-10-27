@@ -1,9 +1,9 @@
 mahider.pro.et {
-    tls {
-        # Use this block to enable email for SSL notifications from Let's Encrypt
-        email mahider3991@gmail.com
-    }
-
-    # Reverse proxy to the Golang application running on port 8080
+    # Enable automatic HTTPS
     reverse_proxy localhost:8080
+
+    log {
+        output file /var/log/caddy/mahider.pro.et.log
+        level INFO
+    }
 }
