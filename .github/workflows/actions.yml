@@ -13,13 +13,7 @@ jobs:
           echo ✅ Changing directory to /root/www/GoCrudChallange &&
           cd /root/www/GoCrudChallange &&
           echo ✅ Pulling latest code from GitHub &&
-          git pull https://${{ secrets.TOKEN }}@github.com/Mahider-T/GoCrudChallange.git main #&&
-          #running_containers=$(docker ps -q --filter ancestor=app) && 
-          #if [ -n \"$running_containers\" ]; then
-          #  echo ✅ Stopping and removing running containers &&
-          #  docker stop $running_containers &&
-          #  docker rm $running_containers
-          #fi &&
+          git pull https://${{ secrets.TOKEN }}@github.com/Mahider-T/GoCrudChallange.git main &&
           echo ✅ Building Docker Image &&
           docker compose -f docker-compose.yml build &&
           echo ✅ Running Docker Container &&
