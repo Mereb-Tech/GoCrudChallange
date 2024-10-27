@@ -1,0 +1,81 @@
+{
+    "clientName": "Thunder Client",
+    "collectionName": "GoCrudChallange",
+    "collectionId": "c9fda1ac-d813-4014-b75f-d91b38931938",
+    "dateExported": "2024-10-27T12:21:30.461Z",
+    "version": "1.2",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "ab4f21ea-5e42-4af1-9335-b04c222cac0a",
+            "colId": "c9fda1ac-d813-4014-b75f-d91b38931938",
+            "containerId": "",
+            "name": "Create Person",
+            "url": "https://mahider.pro.et/person",
+            "method": "POST",
+            "sortNum": 10000,
+            "created": "2024-10-27T12:20:23.059Z",
+            "modified": "2024-10-27T12:20:23.059Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"name\" : \"Mahider Tekola\",\n  \"age\" : 23,\n  \"hobbies\": [\"Reading\", \"Travelling\"]\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "9964bfeb-d348-4976-b161-b65c03d15adf",
+            "colId": "c9fda1ac-d813-4014-b75f-d91b38931938",
+            "containerId": "",
+            "name": "Get Person by Id",
+            "url": "https://mahider.pro.et/person",
+            "method": "GET",
+            "sortNum": 20000,
+            "created": "2024-10-27T12:20:47.410Z",
+            "modified": "2024-10-27T12:20:47.410Z",
+            "headers": []
+        },
+        {
+            "_id": "1cab0949-840f-4dcf-9699-2c906a658b9b",
+            "colId": "c9fda1ac-d813-4014-b75f-d91b38931938",
+            "containerId": "",
+            "name": "Get All Persons",
+            "url": "https://mahider.pro.et/person",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2024-10-27T12:20:58.903Z",
+            "modified": "2024-10-27T12:20:58.903Z",
+            "headers": []
+        },
+        {
+            "_id": "61f8935e-a522-4b0d-9961-d177b2bb6988",
+            "colId": "c9fda1ac-d813-4014-b75f-d91b38931938",
+            "containerId": "",
+            "name": "Update Person ",
+            "url": "https://mahider.pro.et/person/ffc657a9-36ad-4937-8003-a8f95677cdf3",
+            "method": "PUT",
+            "sortNum": 40000,
+            "created": "2024-10-27T12:21:07.502Z",
+            "modified": "2024-10-27T12:21:07.502Z",
+            "headers": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"age\" : 99\n}",
+                "form": []
+            }
+        },
+        {
+            "_id": "794981d4-5772-4cce-8377-ece22ff8259c",
+            "colId": "c9fda1ac-d813-4014-b75f-d91b38931938",
+            "containerId": "",
+            "name": "Delete Person",
+            "url": "https://mahider.pro.et/person/ffc657a9-36ad-4937-8003-a8f95677cdf3",
+            "method": "DELETE",
+            "sortNum": 50000,
+            "created": "2024-10-27T12:21:16.311Z",
+            "modified": "2024-10-27T12:21:16.311Z",
+            "headers": []
+        }
+    ],
+    "ref": "G4f-woEu1Id0Kf7vRpvEX-w-IVG7GgayHQBT2cA-sxtLaPpxcmDPjXsFNcMasHheceNL6uRYM90PNj9OmfF8sw"
+}
