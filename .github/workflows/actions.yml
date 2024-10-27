@@ -10,8 +10,8 @@ jobs:
         run: |
           sshpass -p ${{ secrets.PASSWORD }} ssh -o StrictHostKeyChecking=no ${{ secrets.USER_NAME }}@${{ secrets.SERVER_ADDRESS }} -p ${{ secrets.SSH_PORT }} "
           echo ✅ SSH connection successful &&
-          echo ✅ Changing directory to /www/GoCrudChallange &&
-          cd /www/GoCrudChallange &&
+          echo ✅ Changing directory to /root/www/GoCrudChallange &&
+          cd /root/www/GoCrudChallange &&
           echo ✅ Pulling latest code from GitHub &&
           git pull https://${{ secrets.TOKEN }}@github.com/Mahider-T/GoCrudChallange.git main &&
           running_containers=$(docker ps -q --filter ancestor=your_image_name) && # Replace with your actual image name
