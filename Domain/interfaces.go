@@ -5,8 +5,8 @@ import "github.com/gin-gonic/gin"
 type Person struct {
 	ID      string   `json:"uid" validate:"required"`
 	Name    string   `json:"name" validate:"required,min=2,max=100"`
-	Age     int      `json:"age" validate:"required, gte=0,lte=150"`
-	Hobbies []string `json:"hobbies" validate:"dive,required,min=1,max=50"`
+	Age     int      `json:"age" validate:"required,gte=1,lte=150"`
+	Hobbies []string `json:"hobbies" validate:"dive,min=1,max=50"` 
 }
 
 type PersonRepository interface {
@@ -30,4 +30,5 @@ type PersonController interface {
 	GetPerson(ctx *gin.Context)
 	UpdatePerson(ctx *gin.Context)
 	DeletePerson(ctx *gin.Context)
+	RouteDoesNotExist(ctx *gin.Context)
 }

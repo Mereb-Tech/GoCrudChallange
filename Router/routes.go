@@ -25,5 +25,6 @@ func (route *Router) SetUpRouter(router *gin.Engine) {
 		personRouter.PUT("/:id", route.controller.UpdatePerson)
 		personRouter.DELETE("/:id", route.controller.DeletePerson)
 	}
+	router.NoRoute(route.controller.RouteDoesNotExist)
 
 }

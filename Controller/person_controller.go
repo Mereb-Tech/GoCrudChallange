@@ -73,3 +73,7 @@ func (controller *PersonController) DeletePerson(ctx *gin.Context) {
 	ctx.IndentedJSON(http.StatusOK, gin.H{"message": "person deleted successfully"})
 
 }
+
+func (controller *PersonController) RouteDoesNotExist(ctx *gin.Context) {
+	ctx.IndentedJSON(http.StatusBadGateway, gin.H{"Error": "Route Does not exist"})
+}
