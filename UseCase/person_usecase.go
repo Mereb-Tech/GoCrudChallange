@@ -2,7 +2,9 @@ package usecase
 
 import (
 	"fmt"
+	config "mereb/Config"
 	Domain "mereb/Domain"
+	Models "mereb/Domain/Models"
 
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
@@ -19,41 +21,42 @@ func NewPersonUsecase(personRepo Domain.PersonRepository) Domain.PersonUsecase {
 		personRepo:      personRepo,
 		personValidator: validate,
 	}
-
 }
 
-func (usecase *PersonUsecase) GetAllPersons() ([]Domain.Person, error) {
+func (usecase *PersonUsecase) GetAllPersons() ([]Models.Person, error) {
 	return usecase.personRepo.GetAllPersons()
 
 }
-func (usecase *PersonUsecase) GetPersonByID(id string) (Domain.Person, error) {
+func (usecase *PersonUsecase) GetPersonByID(id string) (Models.Person, error) {
 	return usecase.personRepo.GetPersonByID(id)
 }
 
-func (usecase *PersonUsecase) CreatePerson(person Domain.Person) (Domain.Person, error) {
+func (usecase *PersonUsecase) CreatePerson(person Models.Person) (Models.Person, error) {
 	person.ID = uuid.New().String()
 	validationError := usecase.customErrorMessage(person)
 	if validationError != nil {
-		return Domain.Person{}, validationError
+		return Models.Person{}, validationError
 	}
 	_person, _err := usecase.personRepo.CreatePerson(person)
 	return _person, _err
 }
 
-func (usecase *PersonUsecase) UpdatePerson(id string, person Domain.Person) (Domain.Person, error) {
-	person, err := usecase.personRepo.GetPersonByID(id)
+func (usecase *PersonUsecase) UpdatePerson(id string, person Models.Person) (Models.Person, error) {
+	_, err := usecase.personRepo.GetPersonByID(id)
 	if err != nil {
-		return Domain.Person{}, err
+		return Models.Person{}, err
 	}
 	person.ID = id
 	err = usecase.personValidator.Struct(person)
 	if err != nil {
-		return Domain.Person{}, err
+		return Models.Person{}, err
 	}
+	fmt.Print(person)
 	_person, _err := usecase.personRepo.UpdatePerson(id, person)
 	return _person, _err
 }
 func (usecase *PersonUsecase) DeletePerson(id string) error {
+	// check the existence of the user
 	_, err := usecase.personRepo.GetPersonByID(id)
 	if err != nil {
 		return err
@@ -65,19 +68,8 @@ func (usecase *PersonUsecase) DeletePerson(id string) error {
 	return nil
 }
 
-func (usecase *PersonUsecase) customErrorMessage(person Domain.Person) error {
-	errorMessages := map[string]string{
-		"Person.ID.required":   "User ID is required.",
-		"Person.Name.required": "Name is required.",
-		"Person.Name.min":      "Name must be at least 2 characters.",
-		"Person.Name.max":      "Name can be a maximum of 100 characters.",
-		"Person.Age.required":  "Age is required.",
-		"Person.Age.gte":       "Age must be at least 1 year.",
-		"Person.Age.lte":       "Age must be less than or equal to 150 years.",
-		"Person.Hobbies.min":      "Each hobby must be a non-empty string.",
-		"Person.Hobbies.max":      "Each hobby can be a maximum of 50 characters.",
-
-	}
+func (usecase *PersonUsecase) customErrorMessage(person Models.Person) error {
+	
 
 	err := usecase.personValidator.Struct(person)
 	if err != nil {
@@ -85,7 +77,7 @@ func (usecase *PersonUsecase) customErrorMessage(person Domain.Person) error {
 			var customErrors []string
 			for _, err := range validationErrors {
 				key := fmt.Sprintf("%s.%s", err.StructNamespace(), err.Tag())
-				if msg, found := errorMessages[key]; found {
+				if msg, found := config.ErrorMessages[key]; found {
 					customErrors = append(customErrors, msg)
 				} else {
 					customErrors = append(customErrors, err.Error())

@@ -1,34 +1,27 @@
 package main
 
 import (
+	config "mereb/Config"
 	controller "mereb/Controller"
 	repository "mereb/Repository"
 	router "mereb/Router"
 	usecase "mereb/UseCase"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-   "github.com/gin-contrib/cors"
 )
 
-
-
 func main() {
-   personRepo := repository.NewPersonRepository()
-   personUsecase := usecase.NewPersonUsecase(personRepo)
-   personController := controller.NewPersonController(personUsecase)
-   
-   personRouter := router.NewPersonRouter(personController)
-   router := gin.Default()
+	personRepo := repository.NewPersonRepository()
+	personUsecase := usecase.NewPersonUsecase(personRepo)
+	personController := controller.NewPersonController(personUsecase)
 
-   corsConfig := cors.Config{
-		AllowAllOrigins: true,  // Allows all orgins
-		AllowHeaders:     []string{"Origin", "Content-Type", "Accept"},
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
-		MaxAge:           12 * 3600, 
-	}
-   router.Use(cors.New(corsConfig))
+	personRouter := router.NewPersonRouter(personController)
+	router := gin.Default()
 
-   personRouter.SetUpRouter(router)
-   router.Run(":8080")
+	router.Use(cors.New(config.CorsConfig))
+
+	personRouter.SetUpRouter(router)
+	router.Run(":8080")
 
 }

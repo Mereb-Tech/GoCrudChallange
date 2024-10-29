@@ -2,6 +2,7 @@ package controller
 
 import (
 	"mereb/Domain"
+	Models "mereb/Domain/Models"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -35,7 +36,7 @@ func (controler *PersonController) GetPerson(ctx *gin.Context) {
 }
 
 func (controller *PersonController) CreatePerson(ctx *gin.Context) {
-	var person Domain.Person
+	var person Models.Person
 	if err := ctx.BindJSON(&person); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -50,7 +51,7 @@ func (controller *PersonController) CreatePerson(ctx *gin.Context) {
 
 func (controller *PersonController) UpdatePerson(ctx *gin.Context) {
 	id := ctx.Param("id")
-	var person Domain.Person
+	var person Models.Person
 	if err := ctx.BindJSON(&person); err != nil {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -60,6 +61,7 @@ func (controller *PersonController) UpdatePerson(ctx *gin.Context) {
 		ctx.IndentedJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+
 	ctx.IndentedJSON(http.StatusOK, person)
 }
 
