@@ -1,13 +1,14 @@
 package main
 
 import (
+	"fmt"
 	config "mereb/Config"
 	controller "mereb/Controller"
 	repository "mereb/Repository"
 	router "mereb/Router"
 	usecase "mereb/UseCase"
 
-	"github.com/gin-contrib/cors"
+	"github.com/gin-contrib/cors"	
 	"github.com/gin-gonic/gin"
 )
 
@@ -23,5 +24,6 @@ func main() {
 
 	personRouter.SetUpRouter(router)
 	router.Run(":8080")
+	fmt.Print("Server running on port 8008")
 
 }

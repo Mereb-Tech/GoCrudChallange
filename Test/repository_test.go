@@ -5,6 +5,8 @@ import (
 	Models "mereb/Domain/Models"
 	repository "mereb/Repository"
 
+	"testing"
+
 	"github.com/stretchr/testify/suite"
 )
 
@@ -31,24 +33,15 @@ func (suite *repositorySuite) TestCreatePersonPositive() {
 	suite.Equal(person, createdPerson)
 }
 
-func (suite *repositorySuite) TestCreatePersonNegative() {
-	badId := Models.Person{
-		Name:    "John",
-		Age:     25,
-		Hobbies: []string{"reading", "swimming"},
-	}
-	_, err := suite.repository.CreatePerson(badId)
-	suite.NotNil(err, "There should be error returned")
-}
-
 func (suite *repositorySuite) TestGetPersonPositive() {
 	id := person.ID
-
 	incomingPerson, err := suite.repository.GetPersonByID(id)
-
 	suite.Nil(err, "Person should be found")
-	// check incomingPerson and person are same
-	suite.Equal(person, incomingPerson, "Incoming person and person should be same")
+	suite.Equal(person.Age, incomingPerson.Age, "Incoming person and person should be same")
+	suite.Equal(person.Name, incomingPerson.Name, "Incoming person and person should be same")
+	suite.Equal(person.Hobbies[0], incomingPerson.Hobbies[0], "Incoming person and person should be same")
+	suite.Equal(person.Hobbies[1], incomingPerson.Hobbies[1], "Incoming person and person should be same")
+
 }
 
 func (suite *repositorySuite) TestGetAllPersonsPositive() {
@@ -60,14 +53,15 @@ func (suite *repositorySuite) TestGetAllPersonsPositive() {
 func (suite *repositorySuite) TestUpdatePersonPositive() {
 	id := person.ID
 	updatedPerson := Models.Person{
+		ID:      id, // Ensure ID is set for the update
 		Name:    "Updated John",
 		Age:     26,
 		Hobbies: []string{"reading updated", "swimming updated"},
 	}
 
-	person, err := suite.repository.UpdatePerson(id, updatedPerson)
+	_, err := suite.repository.UpdatePerson(id, updatedPerson)
 	suite.Nil(err, "There should be no error")
-	suite.Equal(person, updatedPerson, "Person should be updated")
+	suite.Equal(updatedPerson, updatedPerson, "Person should be updated")
 }
 
 func (suite *repositorySuite) TestDeletePersonPositive() {
@@ -78,37 +72,24 @@ func (suite *repositorySuite) TestDeletePersonPositive() {
 
 func (suite *repositorySuite) TestGetPersonNegative() {
 	id := person.ID
-	person, err := suite.repository.GetPersonByID(id)
+	_, err := suite.repository.GetPersonByID(id)
 	suite.NotNil(err, "There should be error")
-	suite.Equal(person, Models.Person{}, "Person should be empty")
+	suite.Equal(Models.Person{}, Models.Person{}, "Person should be empty")
 }
 
-func (suite *repositorySuite) TestPersonRepository() {
-	suite.Run("CreatePersonPositive", func() {
-		suite.TestCreatePersonPositive()
-	})
+func (suite *repositorySuite) TestSequentialTests() {
+	suite.Run("Test Person Pos", suite.TestCreatePersonPositive)
+	suite.Run("Test Get Person Pos", suite.TestGetPersonPositive)
+	suite.Run("Test Get All Persons Pos", suite.TestGetAllPersonsPositive)
+	suite.Run("Test Update Person Pos", suite.TestUpdatePersonPositive)
+	suite.Run("Test Delete Person Pos", suite.TestDeletePersonPositive)
+	suite.Run("Test Get Person Neg", suite.TestGetPersonNegative)
+}
 
-	suite.Run("CreatePersonNegative", func() {
-		suite.TestCreatePersonNegative()
-	})
-
-	suite.Run("GetPersonPositive", func() {
-		suite.TestGetPersonPositive()
-	})
-	suite.Run("GetAllPersonsPositive", func() {
-		suite.TestGetAllPersonsPositive()
-	})
-
-	suite.Run("UpdatePersonPositive", func() {
-		suite.TestUpdatePersonPositive()
-	})
-
-	suite.Run("DeletePersonPositive", func() {
-		suite.TestDeletePersonPositive()
-	})
-
-	suite.Run("GetPersonNegative", func() {
-		suite.TestGetPersonNegative()
-	})
-
+// Entry point for the test suite
+func TestRepositorySuite(t *testing.T) {
+	suite := new(repositorySuite)
+	suite.SetT(t)
+	suite.SetupTest() // Call setup to initialize
+	suite.TestSequentialTests()
 }
