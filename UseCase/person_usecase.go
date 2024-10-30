@@ -39,18 +39,17 @@ func (usecase *PersonUsecase) CreatePerson(person Models.Person) (Models.Person,
 	return _person, _err
 }
 
-func (usecase *PersonUsecase) UpdatePerson(id string, person Models.Person) (Models.Person, error) {
+func (usecase *PersonUsecase) UpdatePerson(id string, newPerson Models.Person) (Models.Person, error) {
 	_, err := usecase.personRepo.GetPersonByID(id)
 	if err != nil {
 		return Models.Person{}, err
 	}
-	person.ID = id
-	err = usecase.infra.ValidateStruct(person)
+	newPerson.ID = id
+	err = usecase.infra.ValidateStruct(newPerson)
 	if err != nil {
 		return Models.Person{}, err
 	}
-	fmt.Print(person)
-	_person, _err := usecase.personRepo.UpdatePerson(id, person)
+	_person, _err := usecase.personRepo.UpdatePerson(id, newPerson)
 	return _person, _err
 }
 func (usecase *PersonUsecase) DeletePerson(id string) error {
