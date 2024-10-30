@@ -104,7 +104,7 @@ This document outlines the implementation of a simple CRUD (Create, Read, Update
 5. **DELETE** `/person/${personId}`
    - **Description:** Delete a person record.
    - **Response:**
-     - **204 No Content**: If deletion is successful.
+     - **200 OK**: If deletion is successful.
      - **404 Not Found**: If the person does not exist.
 
 ### Error Handling
@@ -132,6 +132,6 @@ The API is configured to allow cross-origin requests, enabling accessibility by 
 
 ## Conclusion
 
-This documentation serves as a guide to understanding and using the Person API built in Go. For further inquiries or contributions, please refer to the `README.md` file or contact the project maintainer.
+This documentation serves as a guide to understanding and using the Person API built in Go. 
 
 
