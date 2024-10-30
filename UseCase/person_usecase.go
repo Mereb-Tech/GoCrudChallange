@@ -7,19 +7,17 @@ import (
 	Models "mereb/Domain/Models"
 
 	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 )
 
 type PersonUsecase struct {
-	personRepo      Domain.PersonRepository
-	personValidator *validator.Validate
+	personRepo Domain.PersonRepository
+	infra      Domain.InfraStructure
 }
 
-func NewPersonUsecase(personRepo Domain.PersonRepository) Domain.PersonUsecase {
-	validate := validator.New(validator.WithRequiredStructEnabled())
+func NewPersonUsecase(personRepo Domain.PersonRepository, infra Domain.InfraStructure) Domain.PersonUsecase {
 	return &PersonUsecase{
-		personRepo:      personRepo,
-		personValidator: validate,
+		personRepo: personRepo,
+		infra:      infra,
 	}
 }
 
@@ -32,7 +30,7 @@ func (usecase *PersonUsecase) GetPersonByID(id string) (Models.Person, error) {
 }
 
 func (usecase *PersonUsecase) CreatePerson(person Models.Person) (Models.Person, error) {
-	person.ID = uuid.New().String()
+	person.ID = usecase.infra.UUID()
 	validationError := usecase.customErrorMessage(person)
 	if validationError != nil {
 		return Models.Person{}, validationError
@@ -47,7 +45,7 @@ func (usecase *PersonUsecase) UpdatePerson(id string, person Models.Person) (Mod
 		return Models.Person{}, err
 	}
 	person.ID = id
-	err = usecase.personValidator.Struct(person)
+	err = usecase.infra.ValidateStruct(person)
 	if err != nil {
 		return Models.Person{}, err
 	}
@@ -69,9 +67,8 @@ func (usecase *PersonUsecase) DeletePerson(id string) error {
 }
 
 func (usecase *PersonUsecase) customErrorMessage(person Models.Person) error {
-	
 
-	err := usecase.personValidator.Struct(person)
+	err := usecase.infra.ValidateStruct(person)
 	if err != nil {
 		if validationErrors, ok := err.(validator.ValidationErrors); ok {
 			var customErrors []string

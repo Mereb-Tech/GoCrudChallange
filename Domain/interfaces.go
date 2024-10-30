@@ -4,6 +4,8 @@ import (
 	Models "mereb/Domain/Models"
 
 	"github.com/gin-gonic/gin"
+	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 type PersonRepository interface {
@@ -28,4 +30,23 @@ type PersonController interface {
 	UpdatePerson(ctx *gin.Context)
 	DeletePerson(ctx *gin.Context)
 	RouteDoesNotExist(ctx *gin.Context)
+}
+
+type InfraStructure interface {
+	ValidateStruct(s interface{}) error
+	UUID() string
+}
+
+type PersonInfrastructure struct {
+}
+
+func NewPersonInfrastructure() InfraStructure {
+	return &PersonInfrastructure{}
+}
+func (pv *PersonInfrastructure) ValidateStruct(s interface{}) error {
+	return validator.New().Struct(s)
+}
+
+func (pv *PersonInfrastructure) UUID() string {
+	return uuid.New().String()
 }
