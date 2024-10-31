@@ -5,6 +5,7 @@ import (
 	config "mereb/Config"
 	Domain "mereb/Domain"
 	Models "mereb/Domain/Models"
+	"strings"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -35,8 +36,7 @@ func (usecase *PersonUsecase) CreatePerson(person Models.Person) (Models.Person,
 	if validationError != nil {
 		return Models.Person{}, validationError
 	}
-	_person, _err := usecase.personRepo.CreatePerson(person)
-	return _person, _err
+	return usecase.personRepo.CreatePerson(person)
 }
 
 func (usecase *PersonUsecase) UpdatePerson(id string, newPerson Models.Person) (Models.Person, error) {
@@ -79,7 +79,8 @@ func (usecase *PersonUsecase) customErrorMessage(person Models.Person) error {
 					customErrors = append(customErrors, err.Error())
 				}
 			}
-			return fmt.Errorf("validation errors: %s", customErrors)
+			return fmt.Errorf("validation errors: %s", strings.Join(customErrors, "; "))
+
 		}
 	}
 	return nil

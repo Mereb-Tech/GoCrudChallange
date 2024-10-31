@@ -7,6 +7,7 @@ This document outlines the implementation of a simple CRUD (Create, Read, Update
 ## API Endpoints
 
 ### Base URL
+`https://localhost:8080/`
 
 
 
